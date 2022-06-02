@@ -1,8 +1,8 @@
 install-gnome-extensions:
-	cp -r gnome-extensions/extensions ~/.local/share/gnome-shell/
+	cp -r gnome_extensions/extensions ~/.local/share/gnome-shell/
 
 install-gnome-themes:
-	gnome-themes/themes/Orchis-themes/./install.sh
+	gnome_themes/themes/Orchis-theme/./install.sh
 
 install-p10k:
 	cp .p10k.zsh ~/
