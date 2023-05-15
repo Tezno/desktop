@@ -19,7 +19,7 @@ install-gnome-extensions:
 install-gnome-themes:
 	cd gnome_themes/themes
 	git clone git@github.com:vinceliuice/Orchis-theme.git
-	Orchis-theme/./install.sh
+	Orchis-theme/./install.sh --tweaks macos compact
 
 install-p10k:
 	cp .p10k.zsh ~/
@@ -30,10 +30,15 @@ install-zshrc:
 install-cursor:
 	sudo cp -r cursors/* /usr/share/icons
 
-install-icons:
+install-debian-icons:
 	sudo sh -c "echo 'deb http://ppa.launchpad.net/papirus/papirus/ubuntu focal main' > /etc/apt/sources.list.d/papirus-ppa.list"
 	sudo apt-get install dirmngr
 	sudo gpg --no-default-keyring --keyring gnupg-ring:/etc/apt/trusted.gpg.d/papirus.gpg --keyserver keyserver.ubuntu.com --recv E58A9D36647CAE7F
 	sudo chmod 644 /etc/apt/trusted.gpg.d/papirus.gpg
+	sudo apt-get update
+	sudo apt-get install papirus-icon-theme
+
+install-ubuntu-icons:
+	sudo add-apt-repository ppa:papirus/papirus
 	sudo apt-get update
 	sudo apt-get install papirus-icon-theme
