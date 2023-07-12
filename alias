@@ -1,0 +1,24 @@
+# Git
+
+## Log graph
+```
+git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+```
+
+## Clean tags
+```
+alias git-clean-tags="git tag -l | xargs git tag -d && git fetch --tags"
+```
+
+## Clean branch
+```
+alias git-clean-branches='git remote prune origin; git branch --merged | egrep -v "(^\*|master|develop)" | xargs git branch -d'
+```
+
+# Docker
+
+## Clean container
+
+```
+alias docker-clean="docker container prune -f && docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)"
+```
