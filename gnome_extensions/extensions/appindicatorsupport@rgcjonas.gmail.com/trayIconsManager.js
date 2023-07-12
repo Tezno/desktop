@@ -25,6 +25,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
 const IndicatorStatusIcon = Extension.imports.indicatorStatusIcon;
 const Util = Extension.imports.util;
+const SettingsManager = Extension.imports.settingsManager;
 
 let trayIconsManager;
 
@@ -43,28 +44,35 @@ var TrayIconsManager = class TrayIconsManager {
         if (trayIconsManager)
             throw new Error('TrayIconsManager is already constructed');
 
+        this._changedId = SettingsManager.getDefaultGSettings().connect(
+            'changed::legacy-tray-enabled', () => this._toggle());
+
+        this._toggle();
+    }
+
+    _toggle() {
+        if (SettingsManager.getDefaultGSettings().get_boolean('legacy-tray-enabled'))
+            this._enable();
+        else
+            this._disable();
+    }
+
+    _enable() {
+        if (this._tray)
+            return;
+
         this._tray = new Shell.TrayManager();
         Util.connectSmart(this._tray, 'tray-icon-added', this, this.onTrayIconAdded);
         Util.connectSmart(this._tray, 'tray-icon-removed', this, this.onTrayIconRemoved);
 
         this._tray.manage_screen(Main.panel);
-        this._icons = [];
     }
 
-    onTrayIconAdded(_tray, icon) {
-        const trayIcon = new IndicatorStatusIcon.IndicatorStatusTrayIcon(icon);
-        this._icons.push(trayIcon);
-        trayIcon.connect('destroy', () =>
-            this._icons.splice(this._icons.indexOf(trayIcon), 1));
-    }
+    _disable() {
+        if (!this._tray)
+            return;
 
-    onTrayIconRemoved(_tray, icon) {
-        icon.destroy();
-    }
-
-    destroy() {
-        this.emit('destroy');
-        this._icons.forEach(i => i.destroy());
+        IndicatorStatusIcon.getTrayIcons().forEach(i => i.destroy());
         if (this._tray.unmanage_screen) {
             this._tray.unmanage_screen();
             this._tray = null;
@@ -73,6 +81,26 @@ var TrayIconsManager = class TrayIconsManager {
             this._tray = null;
             imports.system.gc(); // force finalizing tray to unmanage screen
         }
+    }
+
+    onTrayIconAdded(_tray, icon) {
+        const trayIcon = new IndicatorStatusIcon.IndicatorStatusTrayIcon(icon);
+        IndicatorStatusIcon.addIconToPanel(trayIcon);
+    }
+
+    onTrayIconRemoved(_tray, icon) {
+        try {
+            const [trayIcon] = IndicatorStatusIcon.getTrayIcons().filter(i => i.icon === icon);
+            trayIcon.destroy();
+        } catch (e) {
+            Util.Logger.warning(`No icon container found for ${icon.title} (${icon})`);
+        }
+    }
+
+    destroy() {
+        this.emit('destroy');
+        SettingsManager.getDefaultGSettings().disconnect(this._changedId);
+        this._disable();
         trayIconsManager = null;
     }
 };

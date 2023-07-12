@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<application-state>
+  <context id="">
+    <application id="telegram-desktop_telegram-desktop.desktop" score="1018" last-seen="1689165709"/>
+    <application id="slack_slack.desktop" score="4487.75" last-seen="1689167369"/>
+    <application id="org.gnome.Extensions.desktop" score="2" last-seen="1689065952"/>
+    <application id="google-chrome.desktop" score="19006.25" last-seen="1689167639"/>
+    <application id="org.gnome.meld.desktop" score="113" last-seen="1688628784"/>
+    <application id="intellij-idea-community_intellij-idea-community.desktop" score="1599.125" last-seen="1689090212"/>
+    <application id="com.gexperts.Tilix.desktop" score="11263.875" last-seen="1689167632"/>
+    <application id="gnome-control-center.desktop" score="32" last-seen="1688726131"/>
+    <application id="code_code.desktop" score="73.5" last-seen="1689065801"/>
+    <application id="update-manager.desktop" score="2.625" last-seen="1689068379"/>
+    <application id="apport-gtk.desktop" score="0" last-seen="1688733204"/>
+    <application id="org.gnome.Calculator.desktop" score="13" last-seen="1688997450"/>
+  </context>
+</application-state>
