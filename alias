@@ -18,7 +18,13 @@ alias git-clean-branches='git remote prune origin; git branch --merged | egrep -
 # Docker
 
 ## Clean container
-
 ```
 alias docker-clean="docker container prune -f && docker rmi -f $(docker images --filter 'dangling=true' -q --no-trunc)"
+```
+
+## Get Dockerfile from image
+```
+docker history --no-trunc <IMAGE_ID>
+alias dfimage="docker run -v /var/run/docker.sock:/var/run/docker.sock --rm alpine/dfimage"
+dfimage -sV=1.36 nginx:latest
 ```
